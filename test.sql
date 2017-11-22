@@ -16,35 +16,53 @@
 CREATE DATABASE IF NOT EXISTS `testauth` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `testauth`;
 
+-- Дамп структуры для таблица testauth.migration
+DROP TABLE IF EXISTS `migration`;
+CREATE TABLE IF NOT EXISTS `migration` (
+  `version` varchar(180) NOT NULL,
+  `apply_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Дамп данных таблицы testauth.migration: ~4 rows (приблизительно)
+DELETE FROM `migration`;
+/*!40000 ALTER TABLE `migration` DISABLE KEYS */;
+INSERT INTO `migration` (`version`, `apply_time`) VALUES
+	('m000000_000000_base', 1511353019),
+	('m171122_121750_create_user_table', 1511353577),
+	('m171122_123328_insert_user_table', 1511364106);
+/*!40000 ALTER TABLE `migration` ENABLE KEYS */;
+
 -- Дамп структуры для таблица testauth.user
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `second_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `password_reset_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `age` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `age` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `gender` varchar(1) COLLATE utf8_unicode_ci DEFAULT '1',
   `photo` text COLLATE utf8_unicode_ci,
   `photo_thumb` text COLLATE utf8_unicode_ci,
   `auth_key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `status` smallint(6) DEFAULT '10',
-  `created_at` int(11) DEFAULT NULL,
-  `updated_at` int(11) DEFAULT NULL,
+  `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password_reset_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `status` smallint(6) NOT NULL DEFAULT '10',
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  UNIQUE KEY `first_name` (`first_name`),
+  UNIQUE KEY `second_name` (`second_name`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `password_reset_token` (`password_reset_token`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Дамп данных таблицы testauth.user: ~0 rows (приблизительно)
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`id`, `first_name`, `second_name`, `email`, `password_hash`, `password_reset_token`, `age`, `gender`, `photo`, `photo_thumb`, `auth_key`, `status`, `created_at`, `updated_at`) VALUES
-	(1, 'Admin', 'Admin', 'admin@a.a', '$2y$13$VEXvYgM1VjnGVXsOlELnmunBMEe6nrpJcBht5ukrbgKhkpFv5j6Hm', '', '28', '1', '/web/uploads/1511306020973295.gif', '/web/uploads/thumbs/1511306020973295.gif', '6GgUhhRYIVPBdBlpwHKNr7Oww18ekaZ6', 10, 1511306028, 1511306028),
-	(2, 'Demo', 'Demo', 'demo@d.d', '$2y$13$Abxi9zIggV8M/XV0YjdtiO1s3uEQGtabg2cVttN9v35jASMuu9KHe', '', '18', '1', '', NULL, 'U4aovzA2mm7mPjZOMI3ByHzEFOBdf8eB', 10, 1511306727, 1511306727),
-	(3, '11111111', '1111', '1@1.1', '$2y$13$SDjZRcm.9UDY49.BG8ESGuzwaGAX0OiCU3H/PtlZE6G/b5e0KwzkO', '', '18', '1', '/web/uploads/15113067995163317.png', '/web/uploads/thumbs/15113067995163317.png', 'IP0ezKMUaiESzM_cGvJ58KaiZ5AxLPRB', 10, 1511306803, 1511306803),
-	(4, '22222', '22222', '2@2.2', '$2y$13$tiY.R/V2HQao.ySwdqSq5uNRNdDjrge2r.CtX3UM83B5kpcOqAxKe', '', '18', '0', '', NULL, '4B744inW9lzwHWhLjM67sc-0oo3Rlzfj', 10, 1511306845, 1511306845);
+INSERT INTO `user` (`id`, `first_name`, `second_name`, `age`, `gender`, `photo`, `photo_thumb`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`) VALUES
+	(1, 'Demo', 'Demo', '18', '1', '/web/uploads/1511306020973295.gif', '/web/uploads/thumbs/1511306020973295.gif', 'U4aovzA2mm7mPjZOMI3ByHzEFOBdf8eB', '$2y$13$Abxi9zIggV8M/XV0YjdtiO1s3uEQGtabg2cVttN9v35jASMuu9KHe', NULL, 'demo@d.d', 10, 1511306727, 1511306727),
+	(2, 'Admin', 'Admin', '34', '1', '/web/uploads/1511306020973295.gif', '/web/uploads/thumbs/1511306020973295.gif', '6GgUhhRYIVPBdBlpwHKNr7Oww18ekaZ6', '$2y$13$VEXvYgM1VjnGVXsOlELnmunBMEe6nrpJcBht5ukrbgKhkpFv5j6Hm', NULL, 'admin@a.a', 10, 1511306028, 1511306028);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
